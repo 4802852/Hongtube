@@ -1,0 +1,28 @@
+{
+  "name": "hongtube",
+  "version": "1.0.0",
+  "description": "Hongtube clone coding",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/4802852/Hongtube.git"
+  },
+  "scripts": {
+    "dev": "nodemon --exec babel-node src/server.js"
+  },
+  "author": "Hongseok",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/4802852/Hongtube/issues"
+  },
+  "homepage": "https://github.com/4802852/Hongtube#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.14.2",
+    "@babel/node": "^7.14.2",
+    "@babel/preset-env": "^7.14.2",
+    "nodemon": "^2.0.7"
+  }
+}
