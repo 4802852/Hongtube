@@ -7,7 +7,7 @@
     "url": "git+https://github.com/4802852/Hongtube.git"
   },
   "scripts": {
-    "dev": "nodemon --exec babel-node src/server.js"
+    "dev": "nodemon --exec babel-node src/init.js"
   },
   "author": "Hongseok",
   "license": "MIT",

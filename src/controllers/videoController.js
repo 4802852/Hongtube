@@ -1,63 +1,49 @@
-let videos = [
-    {
-        title: "First Video",
-        rating: 5,
-        comments: 2,
-        createdAt: "2 minutes ago",
-        views: 59,
-        id: 1,
-    },
-    {
-        title: "Second Video",
-        rating: 4,
-        comments: 5,
-        createdAt: "10 minutes ago",
-        views: 90,
-        id: 2,
-    },
-    {
-        title: "Third Video",
-        rating: 4.5,
-        comments: 10,
-        createdAt: "20 minutes ago",
-        views: 130,
-        id: 3,
-    }
-]
+import Video from "../models/video";
 
-export const trending = (req, res) => {
-    return res.render("home", { pageTitle: "Home", videos })
+export const home = async (req, res) => {
+    // callback 방법
+    // Video.find({}, (error, videos) => {
+    //     return res.render("home", { pageTitle: "Home", videos });
+    // });
+    // promising 방법 : await async 추가
+    const videos = await Video.find({});
+    return res.render("home", { pageTitle: "Home", videos });
+
 };
 export const watch = (req, res) => {
     // const id = req.params.id;
     const { id } = req.params;
-    const video = videos[id - 1];
-    return res.render("watch", { pageTitle: `Watching: ${video.title}`, video })
+    return res.render("watch", { pageTitle: `Watching:` })
 };
 export const getEdit = (req, res) => {
     const { id } = req.params;
-    const video = videos[id - 1];
-    return res.render("edit", { pageTitle: `Editing: ${video.title}`, video})
+    return res.render("edit", { pageTitle: `Editing:` })
 };
 export const postEdit = (req, res) => {
     const { id } = req.params;
     const { title } = req.body;
-    videos[id - 1].title = title;
     return res.redirect(`/videos/${id}`);
 };
 
 export const getUpload = (req, res) => {
     return res.render("upload", { pageTitle: `Upload Video` });
 };
-export const postUpload = (req, res) => {
-    const newVideo = {
-        title: req.body.title,
-        rating: 0,
-        comments: 0,
-        createdAt: "just now",
-        views: 0,
-        id: videos.length + 1,
-    };
-    videos.push(newVideo);
-    return res.redirect("/")
+export const postUpload = async (req, res) => {
+    const { title, description, hashtags } = req.body;
+    try {
+        await Video.create({
+            title: title,
+            description: description,
+            // createdAt: Date.now(),
+            // default date 지정을 통해 삭제 가능
+            hashtags: hashtags.split(",").map(word => `#${word}`),
+        });
+        return res.redirect("/");
+    } catch (error) {
+        return res.render("upload", {
+            pageTitle: `Upload Video`,
+            errorMessage: error._message,
+        });
+    }
+    
 }
