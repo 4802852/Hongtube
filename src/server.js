@@ -1,4 +1,3 @@
-
 import express from "express";
 import morgan from "morgan";
 import session from "express-session";
@@ -23,11 +22,17 @@ app.use(express.urlencoded({ extended: true }));
 
 // session에 접근하기 위한 session middleware
 app.use(session({
-    secret: "Hello!",
-    resave: true,
-    saveUninitialized: true,
+    secret: process.env.COOKIE_SECRET,
+    // session 이 수정되지 않아도 새로 저장하는 옵션.
+    resave: false,
+    // uninitialized session(수정된 적 없는 세션)을 저장하는 옵션. false: 세션을 수정하기 전(로그인 전)에는 세션이 생성되지 않음.
+    saveUninitialized: false,
+    // cookie: {
+    //     // cookie's maxAge in miliseconds, 20000 = 20 seconds
+    //     maxAge: 20000,
+    // },
     // mongodb 에 session 을 저장할 수 있는 장소 생성
-    store: MongoStore.create({ mongoUrl: "mongodb://127.0.0.1:27017/hongtube" }),
+    store: MongoStore.create({ mongoUrl: process.env.DB_URL }),
 }));
 // session 정보를 바탕으로 locals에 전달하기 위한 local middleware. local middleware가 뒤에 와야한다. 순서 중요.
 app.use(localMiddleware);
