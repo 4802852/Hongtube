@@ -5,7 +5,6 @@ import bcrypt from "bcrypt";
 export const getJoin = (req, res) => res.render("join", { pageTitle: "Join" });
 export const postJoin = async (req, res) => {
     const { name, email, username, password, password2, location } = req.body;
-    const exists = await User.exists({ $or: [{ username }, { email }] });
     const pageTitle = "Join";
     if (password !== password2) {
         return res.status(400).render("join", {
@@ -13,6 +12,7 @@ export const postJoin = async (req, res) => {
             errorMessage: "Password confirmation does not match.",
         });
     };
+    const exists = await User.exists({ $or: [{ username }, { email }] });
     if (exists) {
         return res.status(400).render("join", {
             pageTitle,
@@ -142,5 +142,66 @@ export const logout = (req, res) => {
     return res.redirect("/");
 };
 
-export const edit = (req, res) => res.send("Edit User");
+export const getEdit = (req, res) => {
+    return res.render("edit-profile", { pageTitle: "Edit Profile" });
+};
+export const postEdit = async (req, res) => {
+    // const { user } = req.session;
+    // const { name, email, username, location } = req.body;
+    // ES6에서 위의 두 줄을 아래의 줄처럼 혼합하여 쓸 수 있다.
+    const {
+        session: {
+            user: { _id, email: oldEmail, username: oldUsername },
+        },
+        body: { name, email, username, location },
+    } = req;
+    const pageTitle = "Edit Profile";
+    // email과 username이 수정되었는지 확인하여, 수정되었을 경우 기존 중복된 email 혹은 username이 있는지 확인하여 errorMessage 전송
+    if (oldEmail !== email) {
+        const emailExists = await User.exists({ email });
+        if (emailExists) {
+            res.status(400).render("edit-profile", { pageTitle, errorMessage: "This email is already taken" });
+        }
+    }
+    if (oldUsername !== username) {
+        const usernameExists = await User.exists({ username });
+        if (usernameExists) {
+            res.status(400).render("edit-profile", { pageTitle, errorMessage: "This username is already taken" });
+        }
+    }
+    const updatedUser = await User.findByIdAndUpdate(_id, { name, email, username, location }, { new: true });
+    req.session.user = updatedUser;
+    return res.redirect("/users/edit");
+};
+
+export const getChangePassword = (req, res) => {
+    if (req.session.user.socialOnly) {
+        return res.redirect("/");
+    }
+    return res.render("users/change-password", { pageTitle: "Change Password" });
+};
+export const postChangePassword = async (req, res) => {
+    const {
+        session: {
+            user: { _id, password },
+        },
+        body: { oldPassword, newPassword, newPassword2 }
+    } = req;
+    const pageTitle = "Change Password";
+    const ok = await bcrypt.compare(oldPassword, password);
+    if (!ok) {
+        return res.status(400).render("users/change-password", { pageTitle, errorMessage: "The current password is incorrect" });
+    }
+    if (newPassword !== newPassword2) {
+        return res.status(400).render("users/change-password", { pageTitle, errorMessage: "The password does not match the confirmation" });
+    }
+    const user = await User.findById(_id);
+    user.password = newPassword;
+    // user.save() 는 userSchema 의 save 를 작동시켜 password 를 hash 시킨다.
+    user.save();
+    // session 업데이트
+    req.session.user.password = user.password;
+    return res.redirect("/users/logout");
+};
+
 export const see = (req, res) => res.send("see");
