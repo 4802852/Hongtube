@@ -151,9 +151,11 @@ export const postEdit = async (req, res) => {
     // ES6에서 위의 두 줄을 아래의 줄처럼 혼합하여 쓸 수 있다.
     const {
         session: {
-            user: { _id, email: oldEmail, username: oldUsername },
+            user: { _id, avatarUrl, email: oldEmail, username: oldUsername },
         },
         body: { name, email, username, location },
+        // userRouter 의 postEdit 에서 multer middleware 를 추가해주었기 때문에 req.file 을 사용할 수 있다.
+        file,
     } = req;
     const pageTitle = "Edit Profile";
     // email과 username이 수정되었는지 확인하여, 수정되었을 경우 기존 중복된 email 혹은 username이 있는지 확인하여 errorMessage 전송
@@ -169,7 +171,14 @@ export const postEdit = async (req, res) => {
             res.status(400).render("edit-profile", { pageTitle, errorMessage: "This username is already taken" });
         }
     }
-    const updatedUser = await User.findByIdAndUpdate(_id, { name, email, username, location }, { new: true });
+    const updatedUser = await User.findByIdAndUpdate(_id, {
+        // file 이 존재하면 file.path 를 저장하고, 없다면 기존의 avatarUrl 을 유지한다.
+        avatarUrl: file ? file.path : avatarUrl,
+        name,
+        email,
+        username,
+        location ,
+    }, { new: true });
     req.session.user = updatedUser;
     return res.redirect("/users/edit");
 };

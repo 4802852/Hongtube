@@ -37,6 +37,8 @@ app.use(session({
 // session 정보를 바탕으로 locals에 전달하기 위한 local middleware. local middleware가 뒤에 와야한다. 순서 중요.
 app.use(localMiddleware);
 
+// uploads 폴더를 브라우저에 노출시킴.
+app.use("/uploads", express.static("uploads"))
 app.use("/", rootRouter);
 app.use("/videos", videoRouter);
 app.use("/users", userRouter);
