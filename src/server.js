@@ -38,7 +38,8 @@ app.use(session({
 app.use(localMiddleware);
 
 // uploads 폴더를 브라우저에 노출시킴.
-app.use("/uploads", express.static("uploads"))
+app.use("/uploads", express.static("uploads"));
+app.use("/assets", express.static("assets"));
 app.use("/", rootRouter);
 app.use("/videos", videoRouter);
 app.use("/users", userRouter);
