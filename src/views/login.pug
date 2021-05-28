@@ -1,15 +1,15 @@
 extends base
 
 block content 
-    if errorMessage
-        span=errorMessage
-    form(method="POST")
-        input(placeholder="Username", name="username", type="text", required)
-        input(placeholder="Password", name="password", type="password", required)
-        input(type="submit", value="Login")
-        br
-        a(href="/users/github/start") Continue with Github &rarr;
-    hr
-    div 
-        span Dont't have an account? 
-        a(href="/join") Create one now &rarr;
+  if errorMessage
+    span=errorMessage
+  form(method="POST")
+    input(placeholder="Username", name="username", type="text", required)
+    input(placeholder="Password", name="password", type="password", required)
+    input(type="submit", value="Login")
+    br
+    a(href="/users/github/start") Continue with Github &rarr;
+  hr
+  div 
+    span Dont't have an account? 
+    a(href="/join") Create one now &rarr;
