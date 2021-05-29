@@ -3,11 +3,12 @@
   display: flex;
   position: relative;
   align-items: center;
+  border: none;
   input {
     all: unset;
     padding: 5px 20px;
     border-radius: 5px;
-    border: 1px solid #F0F0F0;
+    border: 1px solid #a0a0a0;
     background-color: $bg;
     margin-bottom: 5px;
     font-size: 16px;
@@ -18,7 +19,7 @@
   button {
     all: unset;
     position: absolute;
-    right: 15px;
+    right: 40px;
     font-size: 18px;
     text-align: center;
     border-radius: 5px;

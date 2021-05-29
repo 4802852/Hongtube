@@ -1,5 +1,12 @@
 .social-login {
   border-top: 1px solid rgba(0,0,0,0.3);
-  padding-top: 50px;
-  margin-top: 50px;
+  padding-top: 30px;
+  margin-top: 30px;
+  color: white;
+  .social__btn--github {
+    background-color: #32B356;
+    &:hover {
+      background-color: #238A3B;
+    }
+  }
 }
