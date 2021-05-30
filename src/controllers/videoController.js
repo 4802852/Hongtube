@@ -7,42 +7,39 @@ export const home = async (req, res) => {
   //     return res.render("home", { pageTitle: "Home", videos });
   // });
   // promising 방법 : await async 추가
-  const videos = await Video.find({}).sort({
-    createdAt: "desc"
-  }).populate("owner");
+  const videos = await Video.find({})
+    .sort({
+      createdAt: "desc",
+    })
+    .populate("owner");
   return res.render("home", {
     pageTitle: "Home",
-    videos
+    videos,
   });
-
 };
 export const watch = async (req, res) => {
   // const id = req.params.id;
-  const {
-    id
-  } = req.params;
+  const { id } = req.params;
   // populate 는 Video 모델에 연결된 Object를 동시에 불러와준다.
   // mongoose가 Video 안의 owner 가 User Object의 id 인 것을 알고 해당 Object 를 owner에 불러와준다.
   const video = await Video.findById(id).populate("owner");
   if (!video) {
     return res.status(404).render("404", {
-      pageTitle: "Video not found."
+      pageTitle: "Video not found.",
     });
   }
   return res.render("watch", {
     pageTitle: video.title,
-    video
+    video,
   });
 };
 
 export const getEdit = async (req, res) => {
-  const {
-    id
-  } = req.params;
+  const { id } = req.params;
   const video = await Video.findById(id);
   if (!video) {
     return res.status(404).render("404", {
-      pageTitle: "Video not found."
+      pageTitle: "Video not found.",
     });
   }
   // video 의 owner 와 현재 로그인한 user 를 비교하여 수정할 수 있는 권한을 확인해줌
@@ -51,25 +48,19 @@ export const getEdit = async (req, res) => {
   }
   return res.render("edit", {
     pageTitle: `Edit: ${video.title}`,
-    video
+    video,
   });
 };
 export const postEdit = async (req, res) => {
-  const {
-    id
-  } = req.params;
-  const {
-    title,
-    description,
-    hashtags
-  } = req.body;
+  const { id } = req.params;
+  const { title, description, hashtags } = req.body;
   // const video = await Video.findById(id);
   const video = await Video.exists({
-    _id: id
+    _id: id,
   });
   if (!video) {
     return res.status(404).render("404", {
-      pageTitle: "Video not found."
+      pageTitle: "Video not found.",
     });
   }
   if (String(video.owner) !== String(req.session.user._id)) {
@@ -89,7 +80,7 @@ export const postEdit = async (req, res) => {
 
 export const getUpload = (req, res) => {
   return res.render("upload", {
-    pageTitle: `Upload Video`
+    pageTitle: `Upload Video`,
   });
 };
 export const postUpload = async (req, res) => {
@@ -98,15 +89,9 @@ export const postUpload = async (req, res) => {
   // const { title, description, hashtags } = req.body;
   const {
     session: {
-      user: {
-        _id
-      },
+      user: { _id },
     },
-    body: {
-      title,
-      description,
-      hashtags,
-    },
+    body: { title, description, hashtags },
     file,
   } = req;
   try {
@@ -129,17 +114,15 @@ export const postUpload = async (req, res) => {
       pageTitle: `Upload Video`,
       errorMessage: error._message,
     });
-  };
-}
+  }
+};
 
 export const deleteVideo = async (req, res) => {
-  const {
-    id
-  } = req.params;
+  const { id } = req.params;
   const video = await Video.findById(id);
   if (!video) {
     return res.status(404).render("404", {
-      pageTitle: "Video not found."
+      pageTitle: "Video not found.",
     });
   }
   if (String(video.owner) !== String(req.session.user._id)) {
@@ -150,20 +133,29 @@ export const deleteVideo = async (req, res) => {
 };
 
 export const search = async (req, res) => {
-  const {
-    keyword
-  } = req.query;
+  const { keyword } = req.query;
   let videos = [];
   if (keyword) {
     // search
     videos = await Video.find({
       title: {
-        $regex: new RegExp(keyword, "i")
+        $regex: new RegExp(keyword, "i"),
       },
     }).populate("owner");
-  };
+  }
   return res.render("search", {
     pageTitle: "Search",
-    videos
+    videos,
   });
+};
+
+export const registerView = async (req, res) => {
+  const { id } = req.params;
+  const video = await Video.findById(id);
+  if (!video) {
+    return res.status(404)
+  }
+  video.meta.views = video.meta.views + 1;
+  await video.save();
+  return res.status(200);
 };
