@@ -107,7 +107,7 @@ const handleKeyDown = (event) => {
     event.preventDefault();
     handlePlayClick();
   }
-}
+};
 
 const handleFullScreenChange = () => {
   if (document.fullscreenElement) {
@@ -115,7 +115,12 @@ const handleFullScreenChange = () => {
   } else {
     fullScreenBtnIcon.classList = "fas fa-expand";
   }
-}
+};
+
+const handleEnded = () => {
+  const { id } = videoContainer.dataset;
+  fetch(`/api/videos/${id}/view`, { method: "POST" });
+};
 
 playBtn.addEventListener("click", handlePlayClick);
 muteBtn.addEventListener("click", handleMute);
@@ -129,6 +134,7 @@ videoContainer.addEventListener("mouseleave", handleMouseLeave);
 document.body.addEventListener("keydown", handleKeyDown);
 document.addEventListener("fullscreenchange", handleFullScreenChange);
 video.addEventListener("click", handlePlayClick);
+video.addEventListener("ended", handleEnded);
 if (video.readyState >= 2) {
   handleLoadedMetaData();
 }
