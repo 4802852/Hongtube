@@ -33,4 +33,11 @@ input[type="submit"],
   &:hover {
     background-color: #e00f0f;
   }
+  &:focus {
+    outline: none;
+  }
+  &:disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
 }

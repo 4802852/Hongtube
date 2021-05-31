@@ -5,49 +5,57 @@ const videoSchema = new mongoose.Schema({
     type: String,
     required: true,
     trim: true,
-    maxLength: 80
+    maxLength: 80,
   },
   fileUrl: {
     type: String,
-    required: true
+    required: true,
+  },
+  thumbUrl: {
+    type: String,
+    required: true,
   },
   description: {
     type: String,
     required: true,
     trim: true,
-    minLength: 20
+    minLength: 2,
   },
   createdAt: {
     type: Date,
     required: true,
-    default: Date.now
+    default: Date.now,
   },
-  hashtags: [{
-    type: String,
-    trim: true
-  }],
+  hashtags: [
+    {
+      type: String,
+      trim: true,
+    },
+  ],
   meta: {
     views: {
       type: Number,
       default: 0,
-      required: true
+      required: true,
     },
     rating: {
       type: Number,
       default: 0,
-      required: true
+      required: true,
     },
   },
   // videoSchema 에 User 모델을 연결
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
-    ref: "User"
+    ref: "User",
   },
 });
 
 videoSchema.static("formatHashtags", function (hashtags) {
-  return hashtags.split(",").map((word) => (word.startsWith("#") ? word : `#${word}`))
+  return hashtags
+    .split(",")
+    .map((word) => (word.startsWith("#") ? word : `#${word}`));
 });
 
 // videoSchema.pre('save', async function() {

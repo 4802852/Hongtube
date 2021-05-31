@@ -92,13 +92,14 @@ export const postUpload = async (req, res) => {
       user: { _id },
     },
     body: { title, description, hashtags },
-    file,
+    files: { video, thumb },
   } = req;
   try {
     const newVideo = await Video.create({
       title: title,
       description: description,
-      fileUrl: file.path,
+      fileUrl: video[0].path,
+      thumbUrl: thumb[0].path,
       owner: _id,
       // createdAt: Date.now(),
       // default date 지정을 통해 삭제 가능
