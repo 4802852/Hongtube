@@ -46,7 +46,7 @@ export const postJoin = async (req, res) => {
       errorMessage: error._message,
     });
   }
-  req.flash("success", "Welcome to Hongtube!")
+  req.flash("success", "Welcome to Hongtube!");
   res.redirect("/login");
 };
 export const getLogin = (req, res) =>
@@ -160,7 +160,7 @@ export const finishGithubLogin = async (req, res) => {
 };
 
 export const logout = (req, res) => {
-  req.flash("info", "ByeBye")
+  req.flash("info", "ByeBye");
   req.session.destroy();
   return res.redirect("/");
 };
@@ -221,13 +221,13 @@ export const postEdit = async (req, res) => {
     }
   );
   req.session.user = updatedUser;
-  req.flash("success", "Change saved.")
+  req.flash("success", "Change saved.");
   return res.redirect("/users/edit");
 };
 
 export const getChangePassword = (req, res) => {
   if (req.session.user.socialOnly) {
-    req.flash("error", "Can't change password.")
+    req.flash("error", "Can't change password.");
     return res.redirect("/");
   }
   return res.render("users/change-password", {
@@ -261,7 +261,7 @@ export const postChangePassword = async (req, res) => {
   user.save();
   // session 업데이트
   req.session.user.password = user.password;
-  req.flash("success", "Password Updated")
+  req.flash("success", "Password Updated");
   return res.redirect("/users/logout");
 };
 

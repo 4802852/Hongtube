@@ -50,6 +50,11 @@ const videoSchema = new mongoose.Schema({
     required: true,
     ref: "User",
   },
+  // videoSchema 에 Comment 모델 연결
+  comment: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Comment"
+  }],
 });
 
 videoSchema.static("formatHashtags", function (hashtags) {

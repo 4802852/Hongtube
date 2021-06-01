@@ -44,7 +44,7 @@ export const getEdit = async (req, res) => {
   }
   // video 의 owner 와 현재 로그인한 user 를 비교하여 수정할 수 있는 권한을 확인해줌
   if (String(video.owner) !== String(req.session.user._id)) {
-    req.flash("error", "You are not owner of the video.")
+    req.flash("error", "You are not owner of the video.");
     return res.status(403).redirect("/");
   }
   return res.render("edit", {
@@ -76,7 +76,7 @@ export const postEdit = async (req, res) => {
     description,
     hashtags: Video.formatHashtags(hashtags),
   });
-  req.flash("success", "Change saved.")
+  req.flash("success", "Change saved.");
   return res.redirect(`/videos/${id}`);
 };
 
@@ -111,7 +111,7 @@ export const postUpload = async (req, res) => {
     const user = await User.findById(_id);
     user.videos.push(newVideo._id);
     user.save();
-    req.flash("success", "Video uploaded.")
+    req.flash("success", "Video uploaded.");
     return res.redirect("/");
   } catch (error) {
     return res.status(400).render("upload", {
@@ -133,7 +133,7 @@ export const deleteVideo = async (req, res) => {
     return res.status(403).redirect("/");
   }
   await Video.findByIdAndDelete(id);
-  req.flash("success", "Change deleted.")
+  req.flash("success", "Change deleted.");
   return res.redirect("/");
 };
 
