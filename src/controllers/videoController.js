@@ -1,4 +1,5 @@
 import User from "../models/user";
+import Comment from "../models/comment";
 import Video from "../models/video";
 
 export const home = async (req, res) => {
@@ -22,7 +23,7 @@ export const watch = async (req, res) => {
   const { id } = req.params;
   // populate 는 Video 모델에 연결된 Object를 동시에 불러와준다.
   // mongoose가 Video 안의 owner 가 User Object의 id 인 것을 알고 해당 Object 를 owner에 불러와준다.
-  const video = await Video.findById(id).populate("owner");
+  const video = await Video.findById(id).populate("owner").populate("comment");
   if (!video) {
     return res.status(404).render("404", {
       pageTitle: "Video not found.",
@@ -163,4 +164,27 @@ export const registerView = async (req, res) => {
   video.meta.views = video.meta.views + 1;
   await video.save();
   return res.sendStatus(200);
+};
+
+export const createComment = async (req, res) => {
+  const {
+    params: { id },
+    body: { text },
+    session: { user },
+  } = req;
+  const video = await Video.findById(id);
+  if (!video) {
+    return res.sendStatus(404);
+  }
+  const comment = await Comment.create({
+    text,
+    owner: user._id,
+    video: id,
+  });
+  video.comment.push(comment._id);
+  video.save();
+  const userObj = await User.findById(user._id);
+  userObj.comment.push(comment._id);
+  userObj.save();
+  res.status(201).json({ newCommentId: comment._id });
 };

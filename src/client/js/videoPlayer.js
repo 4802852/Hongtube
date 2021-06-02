@@ -16,6 +16,7 @@ let volumeValue = 0.5;
 video.volume = volumeValue;
 let controlsTimeout = null;
 let controlsMovementTimeout = null;
+let mouseInVideo = false;
 
 const handlePlayClick = () => {
   // if the video is playing, pause it
@@ -86,6 +87,7 @@ const handleFullScreen = () => {
 const hideControls = () => videoControls.classList.remove("showing");
 
 const handleMouseMove = () => {
+  mouseInVideo = true;
   if (controlsTimeout) {
     clearTimeout(controlsTimeout);
     controlsTimeout = null;
@@ -99,11 +101,12 @@ const handleMouseMove = () => {
 };
 
 const handleMouseLeave = () => {
+  mouseInVideo = false;
   controlsTimeout = setTimeout(hideControls, 1000);
 };
 
 const handleKeyDown = (event) => {
-  if (event.keyCode === 32) {
+  if (event.keyCode === 32 & mouseInVideo) {
     event.preventDefault();
     handlePlayClick();
   }

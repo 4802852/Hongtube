@@ -24,6 +24,7 @@ app.use(
     extended: true,
   })
 );
+app.use(express.json());
 
 // session에 접근하기 위한 session middleware
 app.use(
