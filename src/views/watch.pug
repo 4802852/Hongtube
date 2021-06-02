@@ -38,12 +38,13 @@ block content
         button Add Comment
   
   div.video__comments
-    ul 
+    ul#commentList
       each comment in video.comment.reverse()
-        li.video__text(data-id=comment.id)
+        li#comment.video__text(data-id=comment.id)
           i.fas.fa-comment
           span  #{comment.text}
-          span  ❌
+          if String(comment.owner._id) === String(loggedInUser._id)
+            span.delete__btn  ❌
 
 block scripts 
   script(src="/assets/js/videoPlayer.js")
