@@ -1,3 +1,24 @@
+.video__data {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  .video__title {
+    font-size: 26px;
+    margin-bottom: 5px;
+  }
+  .video__createdAt {
+    font-size: 12px;
+  }
+  .video__owner {
+    margin-bottom: 5px;
+    font-size: 14px;
+    a {
+      color: cornflowerblue;
+      text-decoration: underline;
+    }
+  }
+}
+
 .video__comments {
   display: flex;
   flex-direction: column;
@@ -11,5 +32,9 @@
     padding: 10px;
     margin-bottom: 10px;
     border-radius: 9999px;
+    .delete__btn {
+      cursor: pointer;
+      text-align: right;
+    }
   }
 }
