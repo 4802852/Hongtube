@@ -6,7 +6,7 @@ form {
   border-radius: 5px;
 }
 
-input{
+input {
   all: unset;
   padding: 5px 20px;
   border-radius: 5px;
@@ -23,6 +23,7 @@ input{
 
 input[type="submit"],
 .social__btn {
+  border: 1px solid #f0f0f0;
   padding: 12px 20px;
   background-color: rgba($color: $red, $alpha: 0.9);
   text-align: center;
