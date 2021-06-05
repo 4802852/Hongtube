@@ -29,18 +29,18 @@ block content
         if String(video.owner._id) === String(loggedInUser._id)
             a(href=`${video.id}/edit`) Edit Video &rarr;
             a(href=`${video.id}/delete`) Delete Video &rarr;
-        div.video__comments
-            if loggedIn
-                form.video__comment-form#commentForm
-                    textarea(placeholder="Write a nice comment...")
-                    button.social__btn COMMENT
-            ul#commentList
-                each comment in video.comment.reverse()
-                    li#comment.video__text(data-id=comment.id)
-                        i.fas.fa-comment
-                        span  #{comment.text}
-                        if String(comment.owner._id) === String(loggedInUser._id)
-                            span.delete__btn  ❌
+    div.video__comments
+        if loggedIn
+            form.video__comment-form#commentForm
+                textarea(placeholder="Write a nice comment...")
+                button.social__btn COMMENT
+        ul#commentList
+            each comment in video.comment.reverse()
+                li#comment.video__text(data-id=comment.id)
+                    i.fas.fa-comment
+                    span  #{comment.text}
+                    if String(comment.owner._id) === String(loggedInUser._id)
+                        span.delete__btn  ❌
 
 block scripts 
     script(src="/assets/js/videoPlayer.js")
