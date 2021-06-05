@@ -7,6 +7,8 @@
     "url": "git+https://github.com/4802852/Hongtube.git"
   },
   "scripts": {
+    "start": "node build/init.js",
+    "build:server": "babel src -d build",
     "dev:server": "nodemon",
     "dev:assets": "webpack"
   },
@@ -33,6 +35,7 @@
     "regenerator-runtime": "^0.13.7"
   },
   "devDependencies": {
+    "@babel/cli": "^7.14.3",
     "@babel/core": "^7.14.2",
     "@babel/node": "^7.14.2",
     "@babel/preset-env": "^7.14.2",
