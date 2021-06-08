@@ -7,7 +7,7 @@ export const home = async (req, res) => {
   // Video.find({}, (error, videos) => {
   //     return res.render("home", { pageTitle: "Home", videos });
   // });
-  // promising ë°©ë²• : await async ì¶”ê°€
+  // promising ë°©ë²• : await async ì¶”ê??
   const videos = await Video.find({})
     .sort({
       createdAt: "desc",
@@ -21,8 +21,8 @@ export const home = async (req, res) => {
 export const watch = async (req, res) => {
   // const id = req.params.id;
   const { id } = req.params;
-  // populate ëŠ” Video ëª¨ë¸ì— ì—°ê²°ëœ Objectë¥¼ ë™ì‹œì— ë¶ˆëŸ¬ì™€ì¤€ë‹¤.
-  // mongooseê°€ Video ì•ˆì˜ owner ê°€ User Objectì˜ id ì¸ ê²ƒì„ ì•Œê³  í•´ë‹¹ Object ë¥¼ ownerì— ë¶ˆëŸ¬ì™€ì¤€ë‹¤.
+  // populate ?Š” Video ëª¨ë¸?— ?—°ê²°ëœ Objectë¥? ?™?‹œ?— ë¶ˆëŸ¬???ì¤??‹¤.
+  // mongooseê°? Video ?•ˆ?˜ owner ê°? User Object?˜ id ?¸ ê²ƒì„ ?•Œê³? ?•´?‹¹ Object ë¥? owner?— ë¶ˆëŸ¬???ì¤??‹¤.
   const video = await Video.findById(id).populate("owner").populate("comment");
   if (!video) {
     return res.status(404).render("404", {
@@ -43,7 +43,7 @@ export const getEdit = async (req, res) => {
       pageTitle: "Video not found.",
     });
   }
-  // video ì˜ owner ì™€ í˜„ì¬ ë¡œê·¸ì¸í•œ user ë¥¼ ë¹„êµí•˜ì—¬ ìˆ˜ì •í•  ìˆ˜ ìˆëŠ” ê¶Œí•œì„ í™•ì¸í•´ì¤Œ
+  // video ?˜ owner ??? ?˜„?¬ ë¡œê·¸?¸?•œ user ë¥? ë¹„êµ?•˜?—¬ ?ˆ˜? •?•  ?ˆ˜ ?ˆ?Š” ê¶Œí•œ?„ ?™•?¸?•´ì¤?
   if (String(video.owner) !== String(req.session.user._id)) {
     req.flash("error", "You are not owner of the video.");
     return res.status(403).redirect("/");
@@ -101,14 +101,14 @@ export const postUpload = async (req, res) => {
     const newVideo = await Video.create({
       title: title,
       description: description,
-      fileUrl: video[0].path,
-      thumbUrl: thumb[0].path,
+      fileUrl: video[0].location,
+      thumbUrl: thumb[0].location,
       owner: _id,
       // createdAt: Date.now(),
-      // default date ì§€ì •ì„ í†µí•´ ì‚­ì œ ê°€ëŠ¥
+      // default date ì§?? •?„ ?†µ?•´ ?‚­? œ ê°??Š¥
       hashtags: Video.formatHashtags(hashtags),
     });
-    // User ì˜ Videos Array ì— ìƒˆë¡œ ë“±ë¡í•˜ëŠ” video ì˜ id ë¥¼ ì¶”ê°€í•´ì¤Œ
+    // User ?˜ Videos Array ?— ?ƒˆë¡? ?“±ë¡í•˜?Š” video ?˜ id ë¥? ì¶”ê???•´ì¤?
     const user = await User.findById(_id);
     user.videos.push(newVideo._id);
     user.save();

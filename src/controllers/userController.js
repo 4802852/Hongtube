@@ -210,7 +210,7 @@ export const postEdit = async (req, res) => {
     _id,
     {
       // file 이 존재하면 file.path 를 저장하고, 없다면 기존의 avatarUrl 을 유지한다.
-      avatarUrl: file ? file.path : avatarUrl,
+      avatarUrl: file ? file.location : avatarUrl,
       name,
       email,
       username,
