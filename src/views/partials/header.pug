@@ -6,24 +6,24 @@ header
             li 
                 a(href="/search")
                     i.fas.fa-search
-        if loggedIn
-            li 
-                a(href="/videos/upload") Upload Video
-            li 
-                a(href="/users/edit") Edit Profile
-            li
-                a(href="/users/logout") Log Out 
-            li 
-                a(href=`/users/${loggedInUser._id}`)
-                    if loggedInUser.avatarUrl === ""
-                        span 😊
-                    else
-                        if loggedInUser.socialOnly 
-                            img(src=loggedInUser.avatarUrl).header__avatar
-                        else 
-                            img(src="/" + loggedInUser.avatarUrl).header__avatar
-        else
-            li 
-                a(href="/login") Login
-            li 
-                a(href="/join").header__btn Join
+            if loggedIn
+                li 
+                    a(href="/videos/upload") Upload Video
+                li 
+                    a(href="/users/edit") Edit Profile
+                li
+                    a(href="/users/logout") Log Out 
+                li 
+                    a(href=`/users/${loggedInUser._id}`)
+                        if loggedInUser.avatarUrl === ""
+                            span 😊
+                        else
+                            if loggedInUser.socialOnly 
+                                img(src=loggedInUser.avatarUrl).header__avatar
+                            else 
+                                img(src="/" + loggedInUser.avatarUrl).header__avatar
+            else
+                li 
+                    a(href="/login") Login
+                li 
+                    a(href="/join").header__btn Join
