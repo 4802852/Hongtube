@@ -133,8 +133,8 @@ export const finishGithubLogin = async (req, res) => {
     if (!emailObj) {
       return res.redirect("/login");
     }
-    // Github ì •ë³´ì— primary, verified ì´ë©”ì¼ì´ ìˆì„ ê²½ìš°, ì´ë©”ì¼ê³¼ ë™ì¼í•œ ì´ë©”ì¼ì„ ê°€ì§„ User ê°ì²´ë¥¼ ì°¾ìŒ
-    // ì¡°ê±´ì— í•´ë‹¹í•˜ëŠ” Userê°€ ì¡´ì¬í•  ê²½ìš° ê·¸ Userë¡œ ë¡œê·¸ì¸ì„ í—ˆìš©, ì—†ì„ ê²½ìš° ê³„ì •ì„ ìƒì„±.
+    // Github ? •ë³´ì— primary, verified ?´ë©”ì¼?´ ?ˆ?„ ê²½ìš°, ?´ë©”ì¼ê³? ?™?¼?•œ ?´ë©”ì¼?„ ê°?ì§? User ê°ì²´ë¥? ì°¾ìŒ
+    // ì¡°ê±´?— ?•´?‹¹?•˜?Š” Userê°? ì¡´ì¬?•  ê²½ìš° ê·? Userë¡? ë¡œê·¸?¸?„ ?—ˆ?š©, ?—†?„ ê²½ìš° ê³„ì •?„ ?ƒ?„±.
     let user = await User.findOne({
       email: emailObj.email,
     });
@@ -173,17 +173,17 @@ export const getEdit = (req, res) => {
 export const postEdit = async (req, res) => {
   // const { user } = req.session;
   // const { name, email, username, location } = req.body;
-  // ES6ì—ì„œ ìœ„ì˜ ë‘ ì¤„ì„ ì•„ë˜ì˜ ì¤„ì²˜ëŸ¼ í˜¼í•©í•˜ì—¬ ì“¸ ìˆ˜ ìˆë‹¤.
+  // ES6?—?„œ ?œ„?˜ ?‘ ì¤„ì„ ?•„?˜?˜ ì¤„ì²˜?Ÿ¼ ?˜¼?•©?•˜?—¬ ?“¸ ?ˆ˜ ?ˆ?‹¤.
   const {
     session: {
       user: { _id, avatarUrl, email: oldEmail, username: oldUsername },
     },
     body: { name, email, username, location },
-    // userRouter ì˜ postEdit ì—ì„œ multer middleware ë¥¼ ì¶”ê°€í•´ì£¼ì—ˆê¸° ë•Œë¬¸ì— req.file ì„ ì‚¬ìš©í•  ìˆ˜ ìˆë‹¤.
+    // userRouter ?˜ postEdit ?—?„œ multer middleware ë¥? ì¶”ê???•´ì£¼ì—ˆê¸? ?•Œë¬¸ì— req.file ?„ ?‚¬?š©?•  ?ˆ˜ ?ˆ?‹¤.
     file,
   } = req;
   const pageTitle = "Edit Profile";
-  // emailê³¼ usernameì´ ìˆ˜ì •ë˜ì—ˆëŠ”ì§€ í™•ì¸í•˜ì—¬, ìˆ˜ì •ë˜ì—ˆì„ ê²½ìš° ê¸°ì¡´ ì¤‘ë³µëœ email í˜¹ì€ usernameì´ ìˆëŠ”ì§€ í™•ì¸í•˜ì—¬ errorMessage ì „ì†¡
+  // emailê³? username?´ ?ˆ˜? •?˜?—ˆ?Š”ì§? ?™•?¸?•˜?—¬, ?ˆ˜? •?˜?—ˆ?„ ê²½ìš° ê¸°ì¡´ ì¤‘ë³µ?œ email ?˜¹??? username?´ ?ˆ?Š”ì§? ?™•?¸?•˜?—¬ errorMessage ? „?†¡
   if (oldEmail !== email) {
     const emailExists = await User.exists({
       email,
@@ -206,11 +206,12 @@ export const postEdit = async (req, res) => {
       });
     }
   }
+  const isHeroku = process.env.NODE_ENV === "production";
   const updatedUser = await User.findByIdAndUpdate(
     _id,
     {
-      // file ì´ ì¡´ì¬í•˜ë©´ file.path ë¥¼ ì €ì¥í•˜ê³ , ì—†ë‹¤ë©´ ê¸°ì¡´ì˜ avatarUrl ì„ ìœ ì§€í•œë‹¤.
-      avatarUrl: file ? file.location : avatarUrl,
+      // file ?´ ì¡´ì¬?•˜ë©? file.path ë¥? ????¥?•˜ê³?, ?—†?‹¤ë©? ê¸°ì¡´?˜ avatarUrl ?„ ?œ ì§??•œ?‹¤.
+      avatarUrl: file ? (isHeroku ? file.location : file.path) : avatarUrl,
       name,
       email,
       username,
@@ -257,9 +258,9 @@ export const postChangePassword = async (req, res) => {
   }
   const user = await User.findById(_id);
   user.password = newPassword;
-  // user.save() ëŠ” userSchema ì˜ save ë¥¼ ì‘ë™ì‹œì¼œ password ë¥¼ hash ì‹œí‚¨ë‹¤.
+  // user.save() ?Š” userSchema ?˜ save ë¥? ?‘?™?‹œì¼? password ë¥? hash ?‹œ?‚¨?‹¤.
   user.save();
-  // session ì—…ë°ì´íŠ¸
+  // session ?—…?°?´?Š¸
   req.session.user.password = user.password;
   req.flash("success", "Password Updated");
   return res.redirect("/users/logout");
